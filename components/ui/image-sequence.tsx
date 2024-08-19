@@ -46,11 +46,11 @@ export function ImageSequence({
 
   const { scrollYProgress } = useScroll({
     target: target,
-    offset: ["start", "end"],
   });
 
   const imgIdx = useTransform(scrollYProgress, [0, 1], [end, start]);
   useMotionValueEvent(imgIdx, "change", (latest) => {
+    console.log({ latest });
     setSequence(Math.floor(latest));
   });
 

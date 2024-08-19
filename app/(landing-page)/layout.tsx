@@ -5,9 +5,9 @@ export default function LandingPageLayout({
   children,
 }: React.PropsWithChildren) {
   return (
-    <>
+    <Lenis>
       <Navbar />
       <main>{children}</main>
-    </>
+    </Lenis>
   );
 }

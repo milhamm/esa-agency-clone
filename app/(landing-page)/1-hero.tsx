@@ -2,22 +2,22 @@
 
 import { useLayoutEffect, useRef } from "react";
 
-import { ImageSequence } from "@/components/ui";
+import { ImageSequence, Marquee } from "@/components/ui";
 
 const END_SEQUENCE = 49;
 
 export function SectionHero() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
-    typeof window !== "undefined" && window.scrollTo({ top: 0 });
-  }, []);
+  // useLayoutEffect(() => {
+  //   typeof window !== "undefined" && window.scrollTo({ top: 0 });
+  // }, []);
 
   return (
     <div className="h-[200svh] w-full bg-black" ref={containerRef}>
-      <div className="absolute inset-0 z-30 flex h-svh flex-col items-center justify-end">
+      <div className="absolute inset-0 z-30 flex h-svh flex-col items-center justify-end overflow-hidden">
         <div className="container pb-16">
-          <h1 className="text-[10vw]">Aang</h1>
+          <Marquee>Overtake time with us</Marquee>
         </div>
       </div>
       <div className="fixed top-0 h-screen w-full">
