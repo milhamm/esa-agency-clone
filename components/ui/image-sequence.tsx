@@ -48,6 +48,7 @@ export function ImageSequence({
 
   const { scrollYProgress } = useScroll({
     target: target,
+    layoutEffect: false,
   });
 
   const imgIdx = useTransform(scrollYProgress, [0, 1], [end, start]);
