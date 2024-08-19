@@ -20,7 +20,7 @@ export function SectionHero() {
           <Marquee>Overtake time with us</Marquee>
         </div>
       </div>
-      <div className="fixed top-0 h-screen w-full">
+      <div className="sticky top-0 h-screen w-full">
         <ImageSequence
           target={containerRef}
           src={(seq) => `/hero/hero-sequence${seq}.webp`}
