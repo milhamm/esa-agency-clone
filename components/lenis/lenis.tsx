@@ -6,7 +6,10 @@ import { ReactLenis } from "@/libs/lenis";
 
 import "lenis/dist/lenis.css";
 
-export function Lenis({ options }: ComponentProps<typeof ReactLenis>) {
+export function Lenis({
+  children,
+  options,
+}: ComponentProps<typeof ReactLenis>) {
   return (
     <ReactLenis
       root
@@ -19,6 +22,8 @@ export function Lenis({ options }: ComponentProps<typeof ReactLenis>) {
           );
         },
       }}
-    />
+    >
+      {children}
+    </ReactLenis>
   );
 }
