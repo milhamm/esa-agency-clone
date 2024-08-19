@@ -44,6 +44,8 @@ export function ImageSequence({
     animate();
   }, [initialPlay, initalPlayDuration, end, start]);
 
+  console.log({ target });
+
   const { scrollYProgress } = useScroll({
     target: target,
   });
