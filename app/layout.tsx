@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,6 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {Array.from(Array(10).keys()).map((key) => (
+        <link
+          key={key}
+          rel="prefetch"
+          as="image"
+          href={`https://d20b8mqh7zo0pc.cloudfront.net/hero-sequence/v2/webp/ese-hero-sequence${key + 1 <= 9 ? `0${key + 1}` : key + 1}.webp`}
+        />
+      ))}
       <body className={inter.className}>{children}</body>
     </html>
   );

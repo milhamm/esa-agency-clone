@@ -1,3 +1,41 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "root": true,
+  "ignorePatterns": [
+    "!**/*",
+    ".next/**/*",
+    "node_modules",
+    ".next",
+    ".cache",
+    "build",
+    "dist",
+    "out"
+  ],
+  "plugins": ["simple-import-sort"],
+  "rules": {
+    "simple-import-sort/exports": "warn",
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          // Environment variables and node come first.
+          ["dotenv(/.*|$)", "node(?!:?$)"],
+          // Packages `react` and `nextjs` related.
+          ["^react", "^next(?!/?$)", "^@?\\w"],
+          // Internal packages.
+          ["^(@/components)(/.*|$)", "^(@)(/.*|$)"],
+          // Public directory,
+          ["^(~)(/.*|$)"],
+          // Side effect imports.
+          ["^\\u0000"],
+          // Parent imports. Put `..` last.
+          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+          // Other relative imports. Put same-folder imports and `.` last.
+          ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+          // Style imports.
+          ["^.+\\.?(css)$"]
+        ]
+      }
+    ]
+  }
 }
