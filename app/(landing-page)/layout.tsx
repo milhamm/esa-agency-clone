@@ -16,7 +16,7 @@ export default function LandingPageLayout({
       <Navbar />
       <motion.main
         style={{ scale, borderRadius }}
-        className="origin-bottom overflow-clip"
+        className="relative z-20 origin-bottom overflow-clip"
       >
         {children}
       </motion.main>

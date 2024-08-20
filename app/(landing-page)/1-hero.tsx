@@ -7,7 +7,7 @@ import { ImageSequence, Marquee } from "@/components/ui";
 const END_SEQUENCE = 49;
 
 export function SectionHero() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
   const imageSequenceContainerRef = useRef<HTMLDivElement>(null);
 
   // useLayoutEffect(() => {
@@ -15,7 +15,7 @@ export function SectionHero() {
   // }, []);
 
   return (
-    <div className="h-[200svh] w-full bg-black" ref={containerRef}>
+    <section className="h-[200svh] w-full bg-black" ref={containerRef}>
       <div className="absolute inset-0 z-30 flex h-svh flex-col items-center justify-end overflow-hidden">
         <div className="container pb-16">
           <Marquee target={containerRef}>Overtake time with us</Marquee>
@@ -35,6 +35,6 @@ export function SectionHero() {
           initalPlayDuration={1000}
         />
       </div>
-    </div>
+    </section>
   );
 }

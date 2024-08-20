@@ -1,6 +1,6 @@
 export function SectionAbout() {
   return (
-    <div className="relative -mt-[20svh] flex bg-black pb-20">
+    <section className="relative -mt-[20svh] flex bg-black pb-20">
       <div className="container mx-auto">
         <div>
           <h2 className="mr-32 inline-block text-[1.2vw]">This is ESE</h2>
@@ -14,6 +14,6 @@ export function SectionAbout() {
         </div>
       </div>
       <div className="absolute inset-[auto_0%_100%] h-[200px] w-full bg-gradient-to-t from-black to-black/0"></div>
-    </div>
+    </section>
   );
 }
