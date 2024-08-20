@@ -39,15 +39,15 @@ export function ImageSequence({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastSequence = useRef<number>(Infinity);
 
-  const images = useMemo(
-    () =>
-      Array.from(Array(end + 1).keys()).map((i) => {
-        const img = new Image();
-        img.src = src(i.toString().padStart(2, "0"));
-        return img;
-      }),
-    [end, src],
-  );
+  const images = useMemo(() => {
+    if (typeof window === "undefined" || typeof document === "undefined")
+      return [];
+    return Array.from(Array(end + 1).keys()).map((i) => {
+      const img = new Image();
+      img.src = src(i.toString().padStart(2, "0"));
+      return img;
+    });
+  }, [end, src]);
 
   const tick = useCallback(
     (ctx: CanvasRenderingContext2D, seq: number) => {
