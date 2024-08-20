@@ -1,20 +1,35 @@
-import { CSSProperties } from "react";
+"use client";
+
+import { CSSProperties, RefObject, useState } from "react";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 type MarqueeProps = {
+  target: RefObject<HTMLElement>;
   children: string;
   duplicate?: number;
   duration?: number;
 };
 
 export function Marquee({
+  target,
   children,
   duplicate = 2,
   duration = 10_000,
 }: MarqueeProps) {
   const words = children.split(" ");
 
+  const { scrollYProgress } = useScroll({
+    target: target,
+    layoutEffect: false,
+  });
+
+  const x = useTransform(scrollYProgress, [0, 0.7], [0, -450]);
+
   return (
-    <div className="*:animate-ticker-single flex -translate-x-1/3 text-nowrap text-[12vw] font-semibold tracking-[-.5rem] *:flex-none *:pr-32">
+    <motion.div
+      style={{ x }}
+      className="flex text-nowrap text-[12vw] font-semibold tracking-[-.5rem] *:flex-none *:animate-ticker-single *:pr-32"
+    >
       <h1
         style={{
           animationDuration: `${duration}ms`,
@@ -23,7 +38,7 @@ export function Marquee({
         {words.map((word, i) => (
           <span
             key={word + i}
-            className="animate-slide-in inline-block translate-y-full transition-transform"
+            className="inline-block translate-y-full animate-slide-in transition-transform"
             style={
               {
                 "--char-index": (duplicate + 1 - 1) * words.length + i,
@@ -45,7 +60,7 @@ export function Marquee({
           {words.map((word, i) => (
             <span
               key={word + i}
-              className="animate-slide-in inline-block translate-y-full transition-transform"
+              className="inline-block translate-y-full animate-slide-in transition-transform"
               style={
                 {
                   "--char-index": (dupItem + 1 - 1) * words.length + i,
@@ -58,6 +73,6 @@ export function Marquee({
           ))}
         </div>
       ))}
-    </div>
+    </motion.div>
   );
 }

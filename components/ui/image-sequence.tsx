@@ -1,7 +1,12 @@
 "use client";
 
-import { RefObject, useEffect, useState } from "react";
-import Image from "next/image";
+import {
+  RefObject,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import {
   transform,
   useMotionValueEvent,
@@ -9,10 +14,13 @@ import {
   useTransform,
 } from "framer-motion";
 
+import { drawCover } from "@/libs/canvas";
+
 type ImageSequeceProps = {
   start: number;
   end: number;
   target: RefObject<HTMLElement>;
+  imageSequenceContainerTarget: RefObject<HTMLElement>;
   initialPlay?: boolean;
   initalPlayDuration?: number;
   src: (seq: string) => string;
@@ -20,59 +28,69 @@ type ImageSequeceProps = {
 
 export function ImageSequence({
   target,
+  imageSequenceContainerTarget,
   start,
   end,
   initialPlay,
-  initalPlayDuration,
+  initalPlayDuration = 1000,
   src,
 }: ImageSequeceProps) {
-  const [sequence, setSequence] = useState(1);
+  const images = Array.from(Array(end + 1).keys()).map((i) => {
+    const img = new Image();
+    img.src = src(i.toString().padStart(2, "0"));
+    return img;
+  });
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const tick = (ctx: CanvasRenderingContext2D, seq: number) => {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    const img = images[seq];
+    drawCover(ctx, img);
+  };
+
+  useLayoutEffect(() => {
+    const container = imageSequenceContainerTarget.current;
+    const canvas = canvasRef.current;
+    if (!canvas || !container) return;
+    const { width, height } = container.getBoundingClientRect();
+    canvas.width = width;
+    canvas.height = height;
+  }, [imageSequenceContainerTarget]);
 
   useEffect(() => {
-    const duration = initalPlayDuration || 0;
+    const duration = initalPlayDuration;
     const initialTime = performance.now();
     const transformer = transform([0, 1], [start, end]);
 
     const animate = () => {
       const now = performance.now();
       const delta = Math.min((now - initialTime) / duration, 1);
-      setSequence(Math.floor(transformer(delta)));
+
+      const ctx = canvasRef.current?.getContext("2d");
+      if (!ctx) return;
+
+      tick(ctx, Math.floor(transformer(delta)));
       if (delta < 1) requestAnimationFrame(animate);
     };
 
     if (!initialPlay) return;
     animate();
-  }, [initialPlay, initalPlayDuration, end, start]);
-
-  console.log({ target });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: target,
     layoutEffect: false,
   });
 
-  const imgIdx = useTransform(scrollYProgress, [0, 1], [end, start]);
-  useMotionValueEvent(imgIdx, "change", (latest) => {
-    console.log({ latest });
-    setSequence(Math.floor(latest));
+  const sequenceToScroll = useTransform(scrollYProgress, [0, 1], [end, start]);
+  useMotionValueEvent(sequenceToScroll, "change", (seq) => {
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
+    const currentSequence = Math.floor(seq);
+    tick(ctx, currentSequence);
   });
 
-  return Array.from(Array(end).keys()).map((i) => {
-    const currSeq = i + 1;
-    const seq = currSeq <= 9 ? `0${currSeq}` : `${currSeq}`;
-    return (
-      <Image
-        key={seq}
-        src={src(seq)}
-        loading="eager"
-        fill
-        unoptimized
-        alt="Hero Image"
-        className="size-full object-cover"
-        style={{
-          opacity: sequence === currSeq ? 1 : 0,
-        }}
-      />
-    );
-  });
+  return <canvas ref={canvasRef} />;
 }

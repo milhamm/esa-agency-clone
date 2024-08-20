@@ -8,6 +8,7 @@ const END_SEQUENCE = 49;
 
 export function SectionHero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const imageSequenceContainerRef = useRef<HTMLDivElement>(null);
 
   // useLayoutEffect(() => {
   //   typeof window !== "undefined" && window.scrollTo({ top: 0 });
@@ -17,12 +18,16 @@ export function SectionHero() {
     <div className="h-[200svh] w-full bg-black" ref={containerRef}>
       <div className="absolute inset-0 z-30 flex h-svh flex-col items-center justify-end overflow-hidden">
         <div className="container pb-16">
-          <Marquee>Overtake time with us</Marquee>
+          <Marquee target={containerRef}>Overtake time with us</Marquee>
         </div>
       </div>
-      <div className="sticky top-0 h-screen w-full">
+      <div
+        className="sticky top-0 h-screen w-full"
+        ref={imageSequenceContainerRef}
+      >
         <ImageSequence
           target={containerRef}
+          imageSequenceContainerTarget={imageSequenceContainerRef}
           src={(seq) => `/hero/hero-sequence${seq}.webp`}
           start={0}
           end={END_SEQUENCE}
