@@ -97,7 +97,9 @@ export function ImageSequence({
 
       tick(ctx, seq);
       lastSequence.current = seq;
-      if (delta < 1) requestAnimationFrame(animate);
+      if (delta < 1) {
+        requestAnimationFrame(animate);
+      }
     };
 
     if (!initialPlay) return;
