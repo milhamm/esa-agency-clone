@@ -5,6 +5,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
 } from "react";
 import {
@@ -35,28 +36,44 @@ export function ImageSequence({
   initalPlayDuration = 1000,
   src,
 }: ImageSequeceProps) {
-  const images = Array.from(Array(end + 1).keys()).map((i) => {
-    const img = new Image();
-    img.src = src(i.toString().padStart(2, "0"));
-    return img;
-  });
-
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const lastSequence = useRef<number>(Infinity);
 
-  const tick = (ctx: CanvasRenderingContext2D, seq: number) => {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    const img = images[seq];
-    drawCover(ctx, img);
-  };
+  const images = useMemo(
+    () =>
+      Array.from(Array(end + 1).keys()).map((i) => {
+        const img = new Image();
+        img.src = src(i.toString().padStart(2, "0"));
+        return img;
+      }),
+    [end, src],
+  );
+
+  const tick = useCallback(
+    (ctx: CanvasRenderingContext2D, seq: number) => {
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      const img = images[seq];
+      drawCover(ctx, img);
+    },
+    [images],
+  );
 
   useLayoutEffect(() => {
-    const container = imageSequenceContainerTarget.current;
-    const canvas = canvasRef.current;
-    if (!canvas || !container) return;
-    const { width, height } = container.getBoundingClientRect();
-    canvas.width = width;
-    canvas.height = height;
-  }, [imageSequenceContainerTarget]);
+    const scale = () => {
+      const container = imageSequenceContainerTarget.current;
+      const canvas = canvasRef.current;
+      if (!canvas || !container) return;
+      const { width, height } = container.getBoundingClientRect();
+      canvas.width = width;
+      canvas.height = height;
+      tick(canvas.getContext("2d")!, lastSequence.current);
+    };
+    window.addEventListener("resize", scale);
+    scale();
+    return () => {
+      window.removeEventListener("resize", scale);
+    };
+  }, [imageSequenceContainerTarget, tick]);
 
   useEffect(() => {
     const duration = initalPlayDuration;
@@ -70,7 +87,10 @@ export function ImageSequence({
       const ctx = canvasRef.current?.getContext("2d");
       if (!ctx) return;
 
-      tick(ctx, Math.floor(transformer(delta)));
+      const seq = Math.floor(transformer(delta));
+
+      tick(ctx, seq);
+      lastSequence.current = seq;
       if (delta < 1) requestAnimationFrame(animate);
     };
 
@@ -85,11 +105,13 @@ export function ImageSequence({
   });
 
   const sequenceToScroll = useTransform(scrollYProgress, [0, 1], [end, start]);
+
   useMotionValueEvent(sequenceToScroll, "change", (seq) => {
     const ctx = canvasRef.current?.getContext("2d");
     if (!ctx) return;
     const currentSequence = Math.floor(seq);
     tick(ctx, currentSequence);
+    lastSequence.current = currentSequence;
   });
 
   return <canvas ref={canvasRef} />;
