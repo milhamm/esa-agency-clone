@@ -7,6 +7,7 @@ import {
   useLayoutEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import {
   transform,
@@ -36,8 +37,9 @@ export function ImageSequence({
   initalPlayDuration = 1000,
   src,
 }: ImageSequeceProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const lastSequence = useRef<number>(Infinity);
+  const [mounted, setMounted] = useState(false);
 
   const images = useMemo(() => {
     if (typeof window === "undefined" || typeof document === "undefined")
@@ -68,12 +70,16 @@ export function ImageSequence({
       canvas.height = height;
       tick(canvas.getContext("2d")!, lastSequence.current);
     };
+
+    if (mounted) {
+      scale();
+    }
+
     window.addEventListener("resize", scale);
-    scale();
     return () => {
       window.removeEventListener("resize", scale);
     };
-  }, [imageSequenceContainerTarget, tick]);
+  }, [imageSequenceContainerTarget, mounted, tick]);
 
   useEffect(() => {
     const duration = initalPlayDuration;
@@ -114,5 +120,12 @@ export function ImageSequence({
     lastSequence.current = currentSequence;
   });
 
-  return <canvas ref={canvasRef} />;
+  return (
+    <canvas
+      ref={(el) => {
+        canvasRef.current = el;
+        setMounted(true);
+      }}
+    />
+  );
 }
