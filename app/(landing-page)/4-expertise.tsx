@@ -1,18 +1,16 @@
 "use client";
 
-import {
-  motion,
-  HTMLMotionProps,
-  useScroll,
-  useTransform,
-  useMotionValueEvent,
-  useAnimationControls,
-  useSpring,
-  MotionValue,
-} from "framer-motion";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import {
+  motion,
+  MotionValue,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 
 type ItemExpertiseProps = {
   src: string;
