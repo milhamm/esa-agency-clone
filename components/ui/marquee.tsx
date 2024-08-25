@@ -1,13 +1,16 @@
 "use client";
 
-import { CSSProperties, RefObject, useState } from "react";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { CSSProperties, RefObject } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+
+import { cx } from "@/libs/cx";
 
 type MarqueeProps = {
   target: RefObject<HTMLElement>;
   children: string;
   duplicate?: number;
   duration?: number;
+  showEntryAnimation?: boolean;
 };
 
 export function Marquee({
@@ -15,6 +18,7 @@ export function Marquee({
   children,
   duplicate = 2,
   duration = 10_000,
+  showEntryAnimation = false,
 }: MarqueeProps) {
   const words = children.split(" ");
 
@@ -24,6 +28,10 @@ export function Marquee({
   });
 
   const x = useTransform(scrollYProgress, [0, 0.7], [0, -450]);
+
+  const entryAnimationClassname = cx(
+    "translate-y-full animate-slide-in transition-transform",
+  );
 
   return (
     <motion.div
@@ -38,7 +46,9 @@ export function Marquee({
         {words.map((word, i) => (
           <span
             key={word + i}
-            className="inline-block translate-y-full animate-slide-in transition-transform"
+            className={cx("inline-block", {
+              [entryAnimationClassname]: showEntryAnimation,
+            })}
             style={
               {
                 "--char-index": (duplicate + 1 - 1) * words.length + i,
@@ -60,7 +70,9 @@ export function Marquee({
           {words.map((word, i) => (
             <span
               key={word + i}
-              className="inline-block translate-y-full animate-slide-in transition-transform"
+              className={cx("inline-block", {
+                [entryAnimationClassname]: showEntryAnimation,
+              })}
               style={
                 {
                   "--char-index": (dupItem + 1 - 1) * words.length + i,

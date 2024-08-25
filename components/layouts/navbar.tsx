@@ -12,7 +12,7 @@ export function Navbar() {
         </Link>
         <div className="ml-auto flex gap-10">
           <NavItem href="/" text="Home" />
-          <NavItem href="/work" text="Work" />
+          <NavItem href="/works" text="Work" />
           <NavItem href="/agency" text="Agency" />
           <NavItem href="/jobs" text="Jobs" />
           <NavItem href="/contact" text="Contact" />

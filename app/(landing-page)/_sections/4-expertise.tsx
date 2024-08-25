@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { RefObject, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -12,12 +12,7 @@ import {
   useTransform,
 } from "framer-motion";
 
-type ItemExpertiseProps = {
-  src: string;
-  name: string;
-  idx: number;
-  currentIdx: number;
-};
+import { Marquee } from "@/components/ui";
 
 const transition = {
   duration: 1,
@@ -49,7 +44,23 @@ const innerVariants = {
   },
 };
 
-function ItemExpertise({ src, name, idx, currentIdx }: ItemExpertiseProps) {
+type ItemExpertiseProps = {
+  src: string;
+  name: string;
+  idx: number;
+  currentIdx: number;
+  containerRef: RefObject<HTMLElement>;
+  duration?: number;
+};
+
+function ItemExpertise({
+  src,
+  name,
+  idx,
+  currentIdx,
+  containerRef,
+  duration = 20_000,
+}: ItemExpertiseProps) {
   return (
     <motion.div
       variants={outerVariants}
@@ -75,9 +86,9 @@ function ItemExpertise({ src, name, idx, currentIdx }: ItemExpertiseProps) {
           </div>
           <div className="absolute inset-0 flex h-svh flex-col items-center justify-end overflow-hidden">
             <div className="container mx-auto pb-20">
-              <h1 className="flex text-nowrap text-[10vw] font-semibold tracking-[-.5rem]">
+              <Marquee target={containerRef} duration={duration}>
                 {name}
-              </h1>
+              </Marquee>
             </div>
           </div>
         </motion.div>
@@ -153,25 +164,32 @@ export function SectionExpretise() {
               idx={0}
               currentIdx={activeIdx}
               src="/expertises/1-website.jpg"
-              name="Website"
+              name="Wireframe - SEO - UI/UX - Development"
+              containerRef={scrollRef}
             />
             <ItemExpertise
               idx={1}
               currentIdx={activeIdx}
               src="/expertises/2-content-marketing.jpg"
-              name="Content Marketing"
+              name="Campaigning - TikTok - Influencer Marketing - Instagram"
+              duration={42_000}
+              containerRef={scrollRef}
             />
             <ItemExpertise
               idx={2}
               currentIdx={activeIdx}
               src="/expertises/3-branding.jpg"
-              name="Branding"
+              name="Corporate Identity - (Re-)Branding - Logo - Corporate Language - Corporate Design"
+              duration={40_000}
+              containerRef={scrollRef}
             />
             <ItemExpertise
               idx={3}
               currentIdx={activeIdx}
               src="/expertises/4-campaigning.jpg"
-              name="Campaigning"
+              name="Employer Branding - Content-Creation - Concept - Key-Visual - Story Telling"
+              duration={40_000}
+              containerRef={scrollRef}
             />
           </div>
           <div className="container absolute inset-[0_0%_20svh] z-20 mx-auto flex flex-col justify-end pb-20">

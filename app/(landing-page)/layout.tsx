@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
 import { motion, useMotionValue } from "framer-motion";
 
 import { Footer, Navbar } from "@/components/layouts";
 import { Lenis } from "@/components/lenis/lenis";
+import { RouteTransition } from "@/components/route-transition/route-transition";
+import { BackgroundNoise } from "@/components/ui";
 
 export default function LandingPageLayout({
   children,
@@ -12,25 +13,29 @@ export default function LandingPageLayout({
   const scale = useMotionValue(1);
   const borderRadius = useMotionValue(0);
 
-  // Used for resetting scroll position on reload
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.history.scrollRestoration = "manual";
-  }, []);
-
   return (
     <Lenis>
-      <div>
-        <div className="pointer-events-none fixed inset-0 z-[2147483647] bg-[url('https://cdn.prod.website-files.com/651d15fb8f27f4a03c14ae88/651d15fb8f27f4a03c14afa4_5d8424ac4ffed73f4d72846e_5c06f51d6e75c933fe05c728_giphy.gif')] bg-[length:480px] bg-fixed opacity-[0.04]"></div>
-      </div>
+      <BackgroundNoise />
       <Navbar />
-      <motion.main
-        style={{ scale, borderRadius }}
-        className="relative z-20 origin-bottom overflow-clip"
+      <RouteTransition
+        className="max-h-screen"
+        initial={{ y: "100%" }}
+        animate={{ y: "0%" }}
+        exit={{ y: "-100%", scale: 0.8, opacity: 0.7 }}
+        transition={{
+          duration: 0.8,
+          type: "tween",
+          ease: [0.602, 0.001, 0.175, 1],
+        }}
       >
-        {children}
-      </motion.main>
-      <Footer scale={scale} borderRadius={borderRadius} />
+        <motion.main
+          style={{ scale, borderRadius }}
+          className="relative z-20 origin-bottom"
+        >
+          {children}
+        </motion.main>
+        <Footer scale={scale} borderRadius={borderRadius} />
+      </RouteTransition>
     </Lenis>
   );
 }

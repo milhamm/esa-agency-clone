@@ -5,6 +5,7 @@ specifiers:
   '@types/react': ^18
   '@types/react-dom': ^18
   axios: ^1.7.4
+  clsx: ^2.1.1
   eslint: ^8
   eslint-config-next: 14.2.5
   eslint-plugin-simple-import-sort: ^12.1.1
@@ -18,15 +19,18 @@ specifiers:
   react-dom: ^18
   tailwindcss: ^3.4.1
   tailwindcss-animate: ^1.0.7
+  tw-merge: 0.0.1-alpha.3
   typescript: ^5
 
 dependencies:
   axios: 1.7.4
+  clsx: 2.1.1
   framer-motion: 11.3.28_nnrd3gsncyragczmpvfhocinkq
   lenis: 1.1.9_nnrd3gsncyragczmpvfhocinkq
   next: 14.2.5_nnrd3gsncyragczmpvfhocinkq
   react: 18.3.1
   react-dom: 18.3.1_react@18.3.1
+  tw-merge: 0.0.1-alpha.3
 
 devDependencies:
   '@types/node': 20.16.1
@@ -670,6 +674,11 @@ packages:
 
   /client-only/0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+    dev: false
+
+  /clsx/2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
+    engines: {node: '>=6'}
     dev: false
 
   /color-convert/2.0.1:
@@ -2886,6 +2895,10 @@ packages:
 
   /tslib/2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
+    dev: false
+
+  /tw-merge/0.0.1-alpha.3:
+    resolution: {integrity: sha512-HvuKdaUWjJKFlUa/DKDGnicPXill0bUZnzoK/BoTWn0OkKLfIrMMn97VXW6fFdArA40FeBkitWjr7SJRuaDvCg==}
     dev: false
 
   /type-check/0.4.0:
