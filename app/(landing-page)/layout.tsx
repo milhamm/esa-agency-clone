@@ -18,10 +18,9 @@ export default function LandingPageLayout({
       <BackgroundNoise />
       <Navbar />
       <RouteTransition
-        className="max-h-screen"
         initial={{ y: "100%" }}
         animate={{ y: "0%" }}
-        exit={{ y: "-100%", scale: 0.8, opacity: 0.7 }}
+        exit={{ y: "-80%", scale: 0.95, opacity: 0.7 }}
         transition={{
           duration: 0.8,
           type: "tween",
